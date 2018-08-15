@@ -12,7 +12,8 @@ class Installer
     public static function installFramework(Event $event)
     {
         $files = ['./vendor/tssaltan/ts-framework/' => './'];
-        $ignore = ['composer.json', 'ts-config.json'];
+        $keepOriginal = ['composer.json', 'ts-config.json'];
+        $ignoreExt = ['git', 'gitignore', 'gitattributes', 'pack'];
 
         $fs = new Filesystem;
         $io = $event->getIO();
@@ -26,7 +27,12 @@ class Installer
                     $dest = sprintf('%s/%s', $to, $file->getRelativePathname());
 
                     try {
-                        if(in_array(basename($dest), $ignore) && file_exists($dest)){
+                        $e = explode('.', $dest);
+                        $ext = end($e);
+
+                        if(in_array($ext, $ignoreExt)){
+                            continue;
+                        }elseif(in_array(basename($dest), $keepOriginal) && file_exists($dest)){
                             $io->write(sprintf('<comment>[ts-framework]</comment>Keep original <comment>%s</comment>', $dest));
                         } else {
                             if(file_exists($dest)){
@@ -40,8 +46,8 @@ class Installer
                         throw new \InvalidArgumentException(sprintf('<comment>[ts-framework]</comment> Install error on file <error>%s</error>: $s', $file->getBaseName(), $e->getMessage()));
                     }
                 }
-                
-                $fs->remove($from);
+
+                // $fs->remove($from);
             } 
         
         }
