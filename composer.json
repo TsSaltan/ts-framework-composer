@@ -1,0 +1,10 @@
+{
+    "name": "tssaltan/ts-framework-composer",
+    "description": "Composer installer",
+    "require": {
+        "php": ">=5.6"
+    },
+    "autoload": {
+        "psr-4": { "tsframe\\": "" }
+    }
+}
