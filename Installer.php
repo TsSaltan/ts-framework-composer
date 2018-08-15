@@ -3,6 +3,7 @@
 namespace tsframe;
 
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Composer\Script\Event;
 
@@ -13,6 +14,7 @@ class Installer
         $files = ['./vendor/tssaltan/ts-framework/' => './'];
         $ignore = ['composer.json', 'ts-config.json'];
 
+        $fs = new Filesystem;
         $io = $event->getIO();
 
         foreach ($files as $from => $to) {
@@ -25,13 +27,14 @@ class Installer
 
                     try {
                         if(in_array(basename($dest), $ignore) && file_exists($dest)){
-                            unlink($file);
+                            $fs->remove($file);
                             $io->write(sprintf('<comment>[ts-framework]</comment>Ignoring <comment>%s</comment>', $from));
                         } else {
                             if(file_exists($dest)){
-                               unlink($dest);
+                               $fs->remove($dest);
                             }
-                            rename($file, $dest);
+                            $fs->copy($file, $dest);
+                            $fs->remove($file);
                             $io->write(sprintf('<comment>[ts-framework]</comment> Installing <comment>%s</comment> to <comment>%s</comment>.', $from, $to));
                         }
                     } catch (IOException $e) {
