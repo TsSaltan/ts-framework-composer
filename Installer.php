@@ -27,19 +27,21 @@ class Installer
 
                     try {
                         if(in_array(basename($dest), $ignore) && file_exists($dest)){
-                            $io->write(sprintf('<comment>[ts-framework]</comment>Ignoring <comment>%s</comment>', $from));
+                            $io->write(sprintf('<comment>[ts-framework]</comment>Keep original <comment>%s</comment>', $dest));
                         } else {
                             if(file_exists($dest)){
                                $fs->remove($dest);
                             }
                             $fs->copy($file, $dest);
-                            $io->write(sprintf('<comment>[ts-framework]</comment> Installing <comment>%s</comment> to <comment>%s</comment>.', $from, $to));
+                            $io->write(sprintf('<comment>[ts-framework]</comment> Installing <comment>%s</comment> to <comment>%s</comment>.', $file, $dest));
                         }
                         $fs->remove($file);
                     } catch (IOException $e) {
-                        throw new \InvalidArgumentException(sprintf('<comment>[ts-framework]</comment> Install error: <error>%s</error>', $file->getBaseName()));
+                        throw new \InvalidArgumentException(sprintf('<comment>[ts-framework]</comment> Install error on file <error>%s</error>: $s', $file->getBaseName(), $e->getMessage()));
                     }
                 }
+                
+                $fs->remove($from);
             } 
         
         }
