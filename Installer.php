@@ -11,8 +11,22 @@ class Installer
 {
     public static function installFramework(Event $event)
     {
+        /**
+         * Пути, что откуда и куда перемещать0
+         * @var array
+         */
         $files = ['./vendor/tssaltan/ts-framework/' => './'];
-        $keepOriginal = ['composer.json', 'ts-config.json'];
+
+        /**
+         * Имена файлов, которые не будут заменены
+         * @var array
+         */
+        $keepOriginal = ['composer.json', 'ts-config.json', '.htaccess'];
+
+        /**
+         * Расширения файлов, которые игнорируются при копировании
+         * @var array
+         */
         $ignoreExt = ['git', 'gitignore', 'gitattributes', 'pack'];
 
         $fs = new Filesystem;
@@ -33,17 +47,17 @@ class Installer
                         if(in_array($ext, $ignoreExt)){
                             continue;
                         }elseif(in_array(basename($dest), $keepOriginal) && file_exists($dest)){
-                            $io->write(sprintf('<comment>[ts-framework]</comment>Keep original <comment>%s</comment>', $dest));
+                            $io->write(sprintf('<comment>[ts-framework] Keep original: %s</comment>', $dest));
                         } else {
                             if(file_exists($dest)){
                                $fs->remove($dest);
                             }
                             $fs->copy($file, $dest);
-                            $io->write(sprintf('<comment>[ts-framework]</comment> Installing <comment>%s</comment> to <comment>%s</comment>.', $file, $dest));
+                            $io->write(sprintf('<info>[ts-framework] Installing: <comment>%s</comment> => %s</info>', $file, $dest));
                         }
                         $fs->remove($file);
                     } catch (IOException $e) {
-                        throw new \InvalidArgumentException(sprintf('<comment>[ts-framework]</comment> Install error on file <error>%s</error>: $s', $file->getBaseName(), $e->getMessage()));
+                        throw new \InvalidArgumentException(sprintf('<error>[ts-framework] Install error on %s: %s</error>', $file->getBaseName(), $e->getMessage()));
                     }
                 }
 
