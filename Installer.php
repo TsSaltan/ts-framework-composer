@@ -65,6 +65,6 @@ class Installer
             } 
         
         }
-        $io->write(sprintf('<comment>[ts-framework]</comment> Install complete!'));
+        $io->write(sprintf('<fg=green>[ts-framework] Install complete!</>'));
     }
 }
