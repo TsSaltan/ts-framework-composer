@@ -53,7 +53,7 @@ class Installer
                                $fs->remove($dest);
                             }
                             $fs->copy($file, $dest);
-                            $io->write(sprintf('<info>[ts-framework] Installing: <comment>%s</comment> => %s</info>', $file, $dest));
+                            $io->write(sprintf('<info>[ts-framework] Installing: %s => %s</info>', $file, $dest));
                         }
                         $fs->remove($file);
                     } catch (IOException $e) {
