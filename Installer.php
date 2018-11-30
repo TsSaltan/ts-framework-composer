@@ -47,17 +47,17 @@ class Installer
                         if(in_array($ext, $ignoreExt)){
                             continue;
                         }elseif(in_array(basename($dest), $keepOriginal) && file_exists($dest)){
-                            $io->write(sprintf('<comment>[ts-framework] Keep original: %s</comment>', $dest));
+                            $io->write(sprintf('<comment>[ts-framework]</comment> Keep original: <comment>%s</comment>', $dest));
                         } else {
                             if(file_exists($dest)){
                                $fs->remove($dest);
                             }
                             $fs->copy($file, $dest);
-                            $io->write(sprintf('<info>[ts-framework] Installing: %s => %s</info>', $file, $dest));
+                            $io->write(sprintf('<info>[ts-framework]</info> Installing: <comment>%s</comment> => <comment>%s</comment>', $file, $dest));
                         }
                         $fs->remove($file);
                     } catch (IOException $e) {
-                        throw new \InvalidArgumentException(sprintf('<error>[ts-framework] Install error on %s: %s</error>', $file->getBaseName(), $e->getMessage()));
+                        throw new \InvalidArgumentException(sprintf('<error>[ts-framework]</error> Install error at file <comment>%s</comment>: <comment>%s</comment>', $file->getBaseName(), $e->getMessage()));
                     }
                 }
 
@@ -65,6 +65,6 @@ class Installer
             } 
         
         }
-        $io->write(sprintf('<fg=green>[ts-framework] Install complete!</>'));
+        $io->write(sprintf('<fg=green>[ts-framework]</> Install complete!'));
     }
 }
